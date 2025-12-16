@@ -57,6 +57,9 @@
 }
 
 body {
+  margin: 0;
+  padding: 0;
+  /* min-height: 100vh; */
     background-image: url("assets/table.png") !important;
   background-repeat: no-repeat !important;
   background-position: top bottom !important;
@@ -67,7 +70,48 @@ body {
   line-height: 1.5;
   min-height: 100vh;
 }
-.lab-bench,
+.lab-bench {
+  position: absolute;
+  bottom: 40px;      /* table stays at bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  height: 260px;
+  
+}
+
+/* Individual apparatus positions on table */
+
+.lab-item[data-item="beaker"] {
+  left: 20%;
+}
+
+.lab-item[data-item="conical_flask"] {
+  left: 30%;
+}
+
+.lab-item[data-item="measuring_cylinder"] {
+  left: 40%;
+}
+
+.lab-item[data-item="glycine"] {
+  left: 50%;
+  bottom: 90px;
+}
+
+.lab-item[data-item="burette"] {
+  left: 60%;
+}
+
+.lab-item[data-item="stand"] {
+  left: 70%;
+}
+
+.lab-item[data-item="ph_meter"] {
+  left: 80%;
+}
+
+
 .screen {
   background: transparent !important;
 }
@@ -207,9 +251,10 @@ body {
 
 /* Disable grid on landing page only */
 .lab-landing .items-grid {
-  display: block;
+  /* display: block; */
   position: relative;
   height: 260px; /* table height */
+  width: 100%;
 }
 /* Remove bench overlay so JPG is visible */
 .lab-landing .lab-bench {
@@ -231,6 +276,10 @@ body {
   box-shadow: none !important;
   padding: 0 !important;
   cursor: grab;
+}
+.lab-item {
+  position: absolute;
+  touch-action: none;
 }
 
 /* --- EQUIPMENT (FRONT ROW) --- */
@@ -304,6 +353,9 @@ body {
   box-shadow: none !important;
   cursor: grab;
   transition: transform 0.2s ease;
+  /* position: absolute; */
+  bottom: 30px;
+  /* transform: translateX(-50%); */
 }
 
 .lab-item:hover {
@@ -959,4 +1011,10 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 8px; 
+}
+.lab-item img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: none;
 }

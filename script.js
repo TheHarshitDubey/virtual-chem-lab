@@ -132,6 +132,46 @@ const UI = {
     setTimeout(() => this.stirBar.classList.remove('stirring'), 500);
   }
 };
+let touchItem = null;
+let offsetX = 0;
+let offsetY = 0;
+
+document.querySelectorAll('.lab-item').forEach(item => {
+
+  // TOUCH START
+  item.addEventListener('touchstart', e => {
+    e.preventDefault();
+
+    touchItem = item;
+    const touch = e.touches[0];
+    const rect = item.getBoundingClientRect();
+
+    offsetX = touch.clientX - rect.left;
+    offsetY = touch.clientY - rect.top;
+
+    item.classList.add('dragging');
+  }, { passive: false });
+
+  // TOUCH MOVE
+  item.addEventListener('touchmove', e => {
+    if (!touchItem) return;
+    e.preventDefault();
+
+    const touch = e.touches[0];
+
+    touchItem.style.left = (touch.clientX - offsetX) + 'px';
+    touchItem.style.top  = (touch.clientY - offsetY) + 'px';
+  }, { passive: false });
+
+  // TOUCH END
+  item.addEventListener('touchend', () => {
+    if (!touchItem) return;
+
+    touchItem.classList.remove('dragging');
+    touchItem = null;
+  });
+
+});
 
 /* ============================================
    Drag & Drop Handler
