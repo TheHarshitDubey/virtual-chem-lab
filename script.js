@@ -6,6 +6,7 @@ const stepToItemMap = {
   5: 'glycine',
   6: 'naoh'
 };
+let originalPosition = new Map();
 
    const state = {
   currentStep: 0,
@@ -144,8 +145,8 @@ const DragDrop = {
     // Bind draggable items (on both landing and equipment-tray)
     const items = document.querySelectorAll('.lab-item[draggable="true"]');
     items.forEach(item => {
-      item.addEventListener('dragstart', this.handleDragStart.bind(this));
-      item.addEventListener('dragend', this.handleDragEnd.bind(this));
+      // item.addEventListener('dragstart', this.handleDragStart.bind(this));
+      // item.addEventListener('dragend', this.handleDragEnd.bind(this));
     });
 
     // Bind drop zones using dataset.accept
@@ -203,6 +204,71 @@ const DragDrop = {
       Animations.pulseElement(zone);
     }
   },
+/* ============================================
+   POINTER DRAG (DESKTOP + MOBILE)
+   ============================================ */
+
+const PointerDrag = {
+  activeItem: null,
+  offsetX: 0,
+  offsetY: 0,
+
+  init() {
+    document.querySelectorAll('.lab-item').forEach(item => {
+      item.addEventListener('pointerdown', this.startDrag.bind(this));
+    });
+
+    document.addEventListener('pointermove', this.onDrag.bind(this));
+    document.addEventListener('pointerup', this.endDrag.bind(this));
+  },
+
+  startDrag(e) {
+    const item = e.currentTarget;
+    const rect = item.getBoundingClientRect();
+
+    this.activeItem = item;
+    this.offsetX = e.clientX - rect.left;
+    this.offsetY = e.clientY - rect.top;
+
+    item.setPointerCapture(e.pointerId);
+    item.classList.add('dragging');
+
+    item.style.position = 'fixed';
+    item.style.zIndex = 9999;
+  },
+
+  onDrag(e) {
+    if (!this.activeItem) return;
+
+    this.activeItem.style.left = `${e.clientX - this.offsetX}px`;
+    this.activeItem.style.top  = `${e.clientY - this.offsetY}px`;
+  },
+
+  endDrag(e) {
+    if (!this.activeItem) return;
+
+    const droppedItem = this.activeItem;
+    droppedItem.classList.remove('dragging');
+
+    droppedItem.releasePointerCapture(e.pointerId);
+
+    // 🔍 detect drop zone
+    const zone = document.elementFromPoint(e.clientX, e.clientY)?.closest('.drop-zone');
+
+    if (zone && zone.dataset.accept === droppedItem.dataset.item) {
+      DragDrop.placeItem(droppedItem.dataset.item, zone);
+      StepController.checkStepCompletion();
+    }
+
+    // reset visual position
+    droppedItem.style.position = '';
+    droppedItem.style.left = '';
+    droppedItem.style.top = '';
+    droppedItem.style.zIndex = '';
+
+    this.activeItem = null;
+  }
+};
 
   canDrop(zone) {
     const acceptedType = zone.dataset.accept; // must match state.setupComplete keys
@@ -672,6 +738,7 @@ const ResetController = {
 document.addEventListener('DOMContentLoaded', () => {
   UI.init();
   DragDrop.init();
+  PointerDrag.init();
   StepController.init();
 
   UI.startBtn.addEventListener('click', () => {

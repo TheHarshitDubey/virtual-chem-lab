@@ -1008,3 +1008,16 @@ body {
   align-items: flex-start;
   gap: 8px; 
 }
+/* ================================
+   MOBILE DRAG FIX
+   ================================ */
+
+.lab-item {
+  touch-action: none;          /* prevents scroll hijack */
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.lab-item img {
+  pointer-events: none;        /* image won't capture long-press */
+}
