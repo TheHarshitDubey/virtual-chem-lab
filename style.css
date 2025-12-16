@@ -50,7 +50,9 @@
 
 
 /* === Reset & Base === */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -60,7 +62,7 @@ body {
   margin: 0;
   padding: 0;
   /* min-height: 100vh; */
-    background-image: url("assets/table.png") !important;
+  background-image: url("assets/table.png") !important;
   background-repeat: no-repeat !important;
   background-position: top bottom !important;
   background-size: cover !important;
@@ -70,14 +72,16 @@ body {
   line-height: 1.5;
   min-height: 100vh;
 }
+
 .lab-bench {
   position: absolute;
-  bottom: 40px;      /* table stays at bottom */
+  bottom: 40px;
+  /* table stays at bottom */
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
   height: 260px;
-  
+
 }
 
 /* Individual apparatus positions on table */
@@ -218,8 +222,9 @@ body {
   background: linear-gradient(180deg, #f5f7fa, #d8dde3);
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  border-bottom: 8px solid #b4b8bd; /* table edge */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-bottom: 8px solid #b4b8bd;
+  /* table edge */
   /* background: var(--color-surface); */
   /* border-radius: var(--radius-lg); */
   /* padding: 30px; */
@@ -253,15 +258,19 @@ body {
 .lab-landing .items-grid {
   /* display: block; */
   position: relative;
-  height: 260px; /* table height */
+  height: fit-content;
+  top: 60vh;
+  /* table height */
   width: 100%;
 }
+
 /* Remove bench overlay so JPG is visible */
 .lab-landing .lab-bench {
+  
   background: transparent !important;
   box-shadow: none !important;
   border-bottom: none !important;
-    position: relative;
+  position: absolute;
   min-height: 420px;
 }
 
@@ -296,29 +305,29 @@ body {
 }
 
 .lab-landing .lab-item[data-item="pipette"] {
-  left: 42%;
-  bottom: 45px;
+  left: 92%;
+  bottom: 15px;
 }
 
 .lab-landing .lab-item[data-item="burette"] {
-  left: 50%;
+  left: 70%;
   bottom: 25px;
 }
 
 .lab-landing .lab-item[data-item="stand"] {
-  left: 58%;
+  left: 78%;
   bottom: 25px;
 }
 
 .lab-landing .lab-item[data-item="ph_meter"] {
-  left: 68%;
+  left: 88%;
   bottom: 25px;
 }
 
 /* --- CHEMICALS (BACK ROW) --- */
 
 .lab-landing .lab-item[data-item="naoh"] {
-  left: 22%;
+  left: 25%;
   bottom: 100px;
 }
 
@@ -334,12 +343,14 @@ body {
 
 .lab-landing .lab-item[data-item="glycine"] {
   left: 46%;
-  bottom: 100px;
+  bottom: 25px;
+  z-index: -2;
 }
 
 .lab-landing .lab-item[data-item="water"] {
-  left: 54%;
-  bottom: 100px;
+  left: 60%;
+  bottom: 25px;
+  z-index: -2;
 }
 
 .lab-item {
@@ -351,6 +362,7 @@ body {
   transition: transform 0.2s ease;
   /* position: absolute; */
   bottom: 30px;
+  margin-block-start: 14px;
   /* transform: translateX(-50%); */
 }
 
@@ -369,21 +381,26 @@ body {
 }
 
 .lab-item img {
-   width: 65px;
+  width: 65px;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0px 6px 8px rgba(0,0,0,0.25));
+  filter: drop-shadow(0px 6px 8px rgba(0, 0, 0, 0.25));
   width: 50px;
   height: 60px;
   object-fit: contain;
   margin-bottom: 8px;
-  filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.25));
+  filter: drop-shadow(0px 3px 4px rgba(0, 0, 0, 0.25));
 }
 
 .lab-item span {
   display: block;
   font-size: 0.85rem;
   color: var(--color-text-muted);
+  margin-top: -12px;
+ text-wrap: inherit;
+ margin-inline-end: 8px;
+ margin-block-end: 8px;
+ 
 }
 
 .lab-item.chemical {
@@ -424,6 +441,7 @@ body {
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -464,7 +482,7 @@ body {
 
 /* === Workspace Panel === */
 .workspace-panel {
-  margin: 20px  ;
+  margin: 20px;
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   padding: 24px;
@@ -482,9 +500,10 @@ body {
   border-radius: var(--radius-md);
   margin-bottom: 20px;
 }
+
 /*another change*/
 .lab-landing .lab-item img {
-  filter: drop-shadow(0 6px 4px rgba(0,0,0,0.35));
+  filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.35));
 }
 
 
@@ -600,6 +619,7 @@ body {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
+
   100% {
     transform: translateX(-50%) translateY(150px);
     opacity: 0;
@@ -655,9 +675,19 @@ body {
 }
 
 @keyframes stir {
-  0%, 100% { transform: translateX(-50%) rotate(0deg); }
-  25% { transform: translateX(-50%) rotate(20deg); }
-  75% { transform: translateX(-50%) rotate(-20deg); }
+
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(0deg);
+  }
+
+  25% {
+    transform: translateX(-50%) rotate(20deg);
+  }
+
+  75% {
+    transform: translateX(-50%) rotate(-20deg);
+  }
 }
 
 /* === pH Meter Visual === */
@@ -691,8 +721,15 @@ body {
 }
 
 @keyframes phFlash {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .ph-probe {
@@ -779,8 +816,13 @@ body {
 }
 
 @keyframes highlightRow {
-  from { background: hsla(45, 90%, 55%, 0.3); }
-  to { background: transparent; }
+  from {
+    background: hsla(45, 90%, 55%, 0.3);
+  }
+
+  to {
+    background: transparent;
+  }
 }
 
 /* === Graph Container === */
@@ -886,25 +928,25 @@ body {
   .lab-header h1 {
     font-size: 1.8rem;
   }
-  
+
   .lab-header h2 {
     font-size: 1rem;
   }
-  
+
   .items-grid {
     grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     gap: 10px;
   }
-  
+
   .lab-item {
     padding: 12px 8px;
   }
-  
+
   .lab-item img {
     width: 40px;
     height: 50px;
   }
-  
+
   .setup-area {
     flex-direction: column;
     align-items: center;
@@ -912,20 +954,20 @@ body {
     min-height: auto;
     padding: 15px;
   }
-  
+
   .control-panel {
     flex-direction: column;
   }
-  
+
   .btn {
     width: 100%;
   }
-  
+
   .popup-container {
     left: 10px;
     right: 10px;
   }
-  
+
   .step-popup {
     max-width: none;
   }
@@ -948,6 +990,7 @@ body {
   max-height: 100px;
   object-fit: contain;
 }
+
 /* ================================
    LAB LANDING BACKGROUND
    ================================ */
@@ -958,16 +1001,19 @@ body {
   min-height: 100vh;
   position: relative;
 }
+
 /* ================================
    EQUIPMENT TRAY – HORIZONTAL FIX
    ================================ */
 
 #equipment-tray .items-grid {
   display: flex;
-  flex-direction: row;     /* KEY */
+  flex-direction: row;
+  /* KEY */
   gap: 20px;
   align-items: center;
-  overflow-x: auto;        /* scroll if many items */
+  overflow-x: auto;
+  /* scroll if many items */
   padding: 10px 0;
 }
 
@@ -979,6 +1025,7 @@ body {
   width: 55px;
   height: auto;
 }
+
 /* ================================
    DROP ZONE HIGHLIGHT (STEP GUIDANCE)
    ================================ */
@@ -994,9 +1041,11 @@ body {
   0% {
     box-shadow: 0 0 8px rgba(31, 111, 255, 0.4);
   }
+
   50% {
     box-shadow: 0 0 18px rgba(31, 111, 255, 0.8);
   }
+
   100% {
     box-shadow: 0 0 8px rgba(31, 111, 255, 0.4);
   }
@@ -1006,5 +1055,5 @@ body {
 .burette-setup {
   display: flex;
   align-items: flex-start;
-  gap: 8px; 
+  gap: 8px;
 }
