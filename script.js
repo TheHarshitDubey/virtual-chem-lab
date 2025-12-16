@@ -142,7 +142,8 @@ const DragDrop = {
 
   init() {
     // Bind draggable items (on both landing and equipment-tray)
-    const items = document.querySelectorAll('.lab-item[draggable="true"]');
+   const items = []; // disable HTML5 drag (mobile incompatible)
+
     items.forEach(item => {
       item.addEventListener('dragstart', this.handleDragStart.bind(this));
       item.addEventListener('dragend', this.handleDragEnd.bind(this));
@@ -665,6 +666,95 @@ const ResetController = {
     UI.resultsPanel.classList.add('hidden');
   }
 };
+/* ============================================
+   POINTER DRAG (MOBILE + DESKTOP)
+   ============================================ */
+
+const PointerDrag = {
+  activeItem: null,
+  offsetX: 0,
+  offsetY: 0,
+originalPos: new Map(), 
+  init() {
+    document.querySelectorAll('.lab-item').forEach(item => {
+      item.addEventListener('pointerdown', this.start.bind(this));
+    });
+
+    document.addEventListener('pointermove', this.move.bind(this));
+    document.addEventListener('pointerup', this.end.bind(this));
+  },
+
+  start(e) {
+    const item = e.currentTarget;
+    const rect = item.getBoundingClientRect();
+
+    this.activeItem = item;
+    this.offsetX = e.clientX - rect.left;
+    this.offsetY = e.clientY - rect.top;
+
+if (!this.originalPos.has(item)) {
+  this.originalPos.set(item, {
+    left: item.style.left,
+    top: item.style.top
+  });
+}
+
+    item.setPointerCapture(e.pointerId);
+    item.classList.add('dragging');
+
+    item.style.position = 'fixed';
+    item.style.zIndex = 9999;
+  },
+
+  move(e) {
+    if (!this.activeItem) return;
+
+    this.activeItem.style.left = `${e.clientX - this.offsetX}px`;
+    this.activeItem.style.top  = `${e.clientY - this.offsetY}px`;
+  },
+
+  end(e) {
+  if (!this.activeItem) return;
+
+  const dragged = this.activeItem;
+
+  // Allow detecting element underneath dragged item
+  dragged.style.pointerEvents = 'none';
+
+  const dropZone = document
+    .elementFromPoint(e.clientX, e.clientY)
+    ?.closest('.drop-zone');
+
+  dragged.style.pointerEvents = '';
+
+  let placed = false;
+
+  // ✅ CORRECT DROP
+  if (
+    dropZone &&
+    DragDrop.canDrop(dropZone) &&
+    dragged.dataset.item === dropZone.dataset.accept
+  ) {
+    DragDrop.placeItem(dragged.dataset.item, dropZone);
+    StepController.checkStepCompletion();
+    placed = true;
+  }
+
+  // 🔁 SNAP BACK IF NOT PLACED
+  if (!placed) {
+    const pos = this.originalPos.get(dragged);
+    dragged.style.left = pos?.left || '';
+    dragged.style.top  = pos?.top  || '';
+  }
+
+  // Cleanup
+  dragged.classList.remove('dragging');
+  dragged.style.position = '';
+  dragged.style.zIndex = '';
+  this.activeItem = null;
+}
+
+};
 
 /* ============================================
    Initialization & Events
@@ -672,6 +762,7 @@ const ResetController = {
 document.addEventListener('DOMContentLoaded', () => {
   UI.init();
   DragDrop.init();
+  PointerDrag.init();
   StepController.init();
 
   UI.startBtn.addEventListener('click', () => {

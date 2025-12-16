@@ -65,12 +65,13 @@ body {
   background-image: url("assets/table.png") !important;
   background-repeat: no-repeat !important;
   background-position: top bottom !important;
-  background-size: cover !important;
+  background-size: contain;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
   background: var(--color-background);
   color: var(--color-text);
   line-height: 1.5;
   min-height: 100vh;
+
 }
 
 .lab-bench {
@@ -1056,4 +1057,18 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 8px;
+}
+/* ================================
+   MOBILE DRAG SUPPORT
+   ================================ */
+
+.lab-item {
+  touch-action: none;          /* prevents scroll hijack */
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.lab-item img {
+  pointer-events: none;        /* VERY IMPORTANT */
+  -webkit-touch-callout: none; /* disables image menu */
 }
